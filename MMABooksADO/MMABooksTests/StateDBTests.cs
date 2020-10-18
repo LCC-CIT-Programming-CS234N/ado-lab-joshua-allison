@@ -30,6 +30,7 @@ namespace MMABooksTests
         [Test]
         public void TestGetStatesDBUnavailable()
         {
+            /* This test is -supposed- to fail while the database is online and accessible.*/
             Assert.Throws<MySqlException>(() => StateDB.GetStates());
         }
     }

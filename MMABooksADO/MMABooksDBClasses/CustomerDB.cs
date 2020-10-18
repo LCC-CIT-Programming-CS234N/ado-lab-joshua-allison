@@ -146,13 +146,12 @@ namespace MMABooksDBClasses
             return false;
         }
 
-        public static bool UpdateCustomer(Customer oldCustomer,
-            Customer newCustomer)
+        public static bool UpdateCustomer(Customer oldCustomer, Customer newCustomer)
         {
             // create a connection
             MySqlConnection connection = MMABooksDB.GetConnection();
             string updateStatement =
-                "UPDATE Customers SET" +
+                "UPDATE Customers SET " +
                 "Name = @NewName, " +
                 "Address = @NewAddress, " +
                 "City = @NewCity, " +
@@ -168,6 +167,16 @@ namespace MMABooksDBClasses
             MySqlCommand updateCommand =
                 new MySqlCommand(updateStatement, connection);
             updateCommand.Parameters.AddWithValue(
+                "@newName", newCustomer.Name);
+            updateCommand.Parameters.AddWithValue(
+                "@newAddress", newCustomer.Address);
+            updateCommand.Parameters.AddWithValue(
+                "@newCity", newCustomer.City);
+            updateCommand.Parameters.AddWithValue(
+                "@newState", newCustomer.State);
+            updateCommand.Parameters.AddWithValue(
+                "@newZipCode", newCustomer.ZipCode);
+            updateCommand.Parameters.AddWithValue(
                 "@oldCustomerID", oldCustomer.CustomerID);
             updateCommand.Parameters.AddWithValue(
                 "@oldName", oldCustomer.Name);
@@ -179,18 +188,6 @@ namespace MMABooksDBClasses
                 "@oldState", oldCustomer.State);
             updateCommand.Parameters.AddWithValue(
                 "@oldZipCode", oldCustomer.ZipCode);
-            updateCommand.Parameters.AddWithValue(
-                "@newCustomerID", newCustomer.CustomerID);
-            updateCommand.Parameters.AddWithValue(
-                "@newName", newCustomer.Name);
-            updateCommand.Parameters.AddWithValue(
-                "@newAddress", newCustomer.Address);
-            updateCommand.Parameters.AddWithValue(
-                "@newCity", newCustomer.City);
-            updateCommand.Parameters.AddWithValue(
-                "@newState", newCustomer.State);
-            updateCommand.Parameters.AddWithValue(
-                "@newZipCode", newCustomer.ZipCode);
             try
             {
                 // open the connection

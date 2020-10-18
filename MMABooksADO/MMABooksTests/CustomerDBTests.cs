@@ -19,8 +19,9 @@ namespace MMABooksTests
         }
 
         [Test]
-        public void TestCreateCustomer()
+        public void TestAddCustomer()
         {
+            /*Create the test variables.*/
             Customer c = new Customer();
             c.Name = "Mickey Mouse";
             c.Address = "101 Main Street";
@@ -28,24 +29,61 @@ namespace MMABooksTests
             c.State = "FL";
             c.ZipCode = "10101";
 
+            /* Test the command.*/
             int customerID = CustomerDB.AddCustomer(c);
             c = CustomerDB.GetCustomer(customerID);
+            /* If the test subject has a name within the database, the test was successful. */
             Assert.AreEqual("Mickey Mouse", c.Name);
+            /*Clean up the test*/
+            CustomerDB.DeleteCustomer(c);
         }
 
         [Test]
         public void TestDeleteCustomer()
         {
+            /*Create the test variables.*/
             Customer c = new Customer();
             c.Name = "Mickey Mouse";
             c.Address = "101 Main Street";
             c.City = "Orlando";
             c.State = "FL";
             c.ZipCode = "10101";
+            int customerID = CustomerDB.AddCustomer(c);
+            c = CustomerDB.GetCustomer(customerID);
 
-            /* When I left off, I had just written the delete and update methods for the Customer DB. I was in the middle of writing the test for the delete statement. It failed; I think the logic of the test is right, but the coding for the delete statement is wrong, because the method returned 0, meaning 0 rows were affected. I was in the middle of investigating that.*/
+            /* Test the command.*/
             bool isCustomerDeleted = CustomerDB.DeleteCustomer(c);
+            /* If it affected the database in some way, the test was successful. */
             Assert.AreEqual(true, isCustomerDeleted);
+        }
+
+        [Test]
+        public void TestUpdateCustomer()
+        {
+            /*Create the test variables.*/
+            Customer oldCustomer = new Customer();
+            oldCustomer.Name = "Mickey Mouse";
+            oldCustomer.Address = "101 Main Street";
+            oldCustomer.City = "Orlando";
+            oldCustomer.State = "FL";
+            oldCustomer.ZipCode = "10101";
+            int customerID = CustomerDB.AddCustomer(oldCustomer);
+            oldCustomer = CustomerDB.GetCustomer(customerID);
+
+            Customer newCustomer = new Customer();
+            newCustomer.Name = "Minnie Mouse";
+            newCustomer.Address = "123 Dream Street";
+            newCustomer.City = "Anaheim";
+            newCustomer.State = "CA";
+            newCustomer.ZipCode = "01010";
+            
+            /* Test the command.*/
+            bool isCustomerUpdated = CustomerDB.UpdateCustomer(oldCustomer, newCustomer);
+            /* If it affected the database in some way, the test was successful. */
+            Assert.AreEqual(true, isCustomerUpdated);
+            /* Clean up the test.*/
+            newCustomer = CustomerDB.GetCustomer(customerID);
+            CustomerDB.DeleteCustomer(newCustomer);
         }
     }
 }
