@@ -92,7 +92,7 @@ namespace MMABooksTests
                 state.StateCode = "123";
                 Assert.Fail("If the exception IS NOT thrown, the property IS NOT doing the right thing.");
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 Assert.Pass("If the exception IS thrown, the property IS doing the right thing.");
             }

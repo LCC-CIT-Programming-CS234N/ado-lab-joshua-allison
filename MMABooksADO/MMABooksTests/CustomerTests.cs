@@ -13,8 +13,8 @@ namespace MMABooksTests
         private Customer def;
         private Customer c;
 
-        // this method gets called BEFORE EVERY TEST to recreate the customer object
-        // so that every test gets a "fresh" customer and the results of one test
+        // this method gets called BEFORE EVERY TEST to recreate the product object
+        // so that every test gets a "fresh" product and the results of one test
         // don't impact the results of the next
         [SetUp]
         public void SetUp()
@@ -195,7 +195,7 @@ namespace MMABooksTests
                 c.ZipCode = "0122345678901223456789";
                 Assert.Fail("If the exception IS NOT thrown, the property IS NOT doing the right thing.");
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 Assert.Pass("If the exception IS thrown, the property IS doing the right thing.");
             }

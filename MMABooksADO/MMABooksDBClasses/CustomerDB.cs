@@ -97,6 +97,7 @@ namespace MMABooksDBClasses
         public static bool DeleteCustomer(Customer customer)
         {
             // get a connection to the database
+            MySqlConnection connection = MMABooksDB.GetConnection();
             string deleteStatement =
                 "DELETE FROM Customers " +
                 "WHERE CustomerID = @CustomerID " +
@@ -106,20 +107,40 @@ namespace MMABooksDBClasses
                 "AND State = @State " +
                 "AND ZipCode = @ZipCode";
             // set up the command object
+            MySqlCommand deleteCommand =
+                new MySqlCommand(deleteStatement, connection);
+            deleteCommand.Parameters.AddWithValue(
+                "@CustomerID", customer.CustomerID);
+            deleteCommand.Parameters.AddWithValue(
+                "@Name", customer.Name);
+            deleteCommand.Parameters.AddWithValue(
+                "@Address", customer.Address);
+            deleteCommand.Parameters.AddWithValue(
+                "@City", customer.City);
+            deleteCommand.Parameters.AddWithValue(
+                "@State", customer.State);
+            deleteCommand.Parameters.AddWithValue(
+                "@ZipCode", customer.ZipCode);
 
             try
             {
                 // open the connection
+                connection.Open();
                 // execute the command
+                int deleteCommandReturn = deleteCommand.ExecuteNonQuery();
                 // if the number of records returned = 1, return true otherwise return false
+                if (deleteCommandReturn == 1)
+                    return true;
+                /* I believe the 'return false' in the comment above refers to the 'return false' below, so I will leave that there, and not type 'else return false' above.*/
             }
             catch (MySqlException ex)
             {
-                // throw the exception
+                throw ex;
             }
             finally
             {
                 // close the connection
+                connection.Close();
             }
 
             return false;
@@ -129,8 +150,9 @@ namespace MMABooksDBClasses
             Customer newCustomer)
         {
             // create a connection
+            MySqlConnection connection = MMABooksDB.GetConnection();
             string updateStatement =
-                "UPDATE Customers SET " +
+                "UPDATE Customers SET" +
                 "Name = @NewName, " +
                 "Address = @NewAddress, " +
                 "City = @NewCity, " +
@@ -143,19 +165,51 @@ namespace MMABooksDBClasses
                 "AND State = @OldState " +
                 "AND ZipCode = @OldZipCode";
             // setup the command object
+            MySqlCommand updateCommand =
+                new MySqlCommand(updateStatement, connection);
+            updateCommand.Parameters.AddWithValue(
+                "@oldCustomerID", oldCustomer.CustomerID);
+            updateCommand.Parameters.AddWithValue(
+                "@oldName", oldCustomer.Name);
+            updateCommand.Parameters.AddWithValue(
+                "@oldAddress", oldCustomer.Address);
+            updateCommand.Parameters.AddWithValue(
+                "@oldCity", oldCustomer.City);
+            updateCommand.Parameters.AddWithValue(
+                "@oldState", oldCustomer.State);
+            updateCommand.Parameters.AddWithValue(
+                "@oldZipCode", oldCustomer.ZipCode);
+            updateCommand.Parameters.AddWithValue(
+                "@newCustomerID", newCustomer.CustomerID);
+            updateCommand.Parameters.AddWithValue(
+                "@newName", newCustomer.Name);
+            updateCommand.Parameters.AddWithValue(
+                "@newAddress", newCustomer.Address);
+            updateCommand.Parameters.AddWithValue(
+                "@newCity", newCustomer.City);
+            updateCommand.Parameters.AddWithValue(
+                "@newState", newCustomer.State);
+            updateCommand.Parameters.AddWithValue(
+                "@newZipCode", newCustomer.ZipCode);
             try
             {
                 // open the connection
+                connection.Open();
                 // execute the command
+                int updateCommandReturn = updateCommand.ExecuteNonQuery();
                 // if the number of records returned = 1, return true otherwise return false
+                if (updateCommandReturn == 1)
+                    return true;
             }
             catch (MySqlException ex)
             {
                 // throw the exception
+                throw ex;
             }
             finally
             {
                 // close the connection
+                connection.Close();
             }
 
             return false;
