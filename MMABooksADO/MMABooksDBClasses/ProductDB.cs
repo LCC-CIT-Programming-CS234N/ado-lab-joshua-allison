@@ -50,15 +50,18 @@ namespace MMABooksDBClasses
             }
         }
 
-        public static string AddProduct(Product product)
+        public static bool AddProduct(Product product)
         {
+            //Get the connection
             MySqlConnection connection = MMABooksDB.GetConnection();
+            //Prep the SQL statement
             string insertStatement =
                 "INSERT Products " +
                 "(ProductCode, Description, UnitPrice, OnHandQuantity) " +
                 "VALUES (@ProductCode, @Description, @UnitPrice, @OnHandQuantity)";
             MySqlCommand insertCommand =
                 new MySqlCommand(insertStatement, connection);
+            //Load the statement with parameters passed from the product object.
             insertCommand.Parameters.AddWithValue(
                 "@ProductCode", product.ProductCode);
             insertCommand.Parameters.AddWithValue(
@@ -69,16 +72,13 @@ namespace MMABooksDBClasses
                 "@OnHandQuantity", product.ProductOnHandQuantity);
             try
             {
+                //Open the connection
                 connection.Open();
-                insertCommand.ExecuteNonQuery();
-
-                string selectStatement =
-                    "SELECT * FROM products WHERE ProductCode = \'" + product.ProductCode + "\'";
-                MySqlCommand selectCommand =
-                    new MySqlCommand(selectStatement, connection);
-
-                string resultProductCode = selectCommand.ExecuteScalar().ToString();
-                return resultProductCode;
+                //Run the command, and return the number of rows affected.
+                int rowsReturned = insertCommand.ExecuteNonQuery();
+                //If there is at least 1 row affected, return true; else, false.
+                Boolean isProductAdded = rowsReturned > 0 ? isProductAdded = true : isProductAdded = false;
+                return isProductAdded;
             }
             catch (MySqlException ex)
             {

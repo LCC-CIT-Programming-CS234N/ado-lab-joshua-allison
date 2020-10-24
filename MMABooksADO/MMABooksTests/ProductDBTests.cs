@@ -28,11 +28,11 @@ namespace MMABooksTests
             p.ProductOnHandQuantity = 10;
 
             /* Test the command.*/
-            string productCode = ProductDB.AddProduct(p);
-            p = ProductDB.GetProduct(productCode);
+            Boolean isProductAdded = ProductDB.AddProduct(p);
             /* If the test subject has a name within the database, the test was successful. */
-            Assert.AreEqual("AAAA", p.ProductCode);
+            Assert.IsTrue(isProductAdded);
             /*Clean up the test*/
+            p = ProductDB.GetProduct(p.ProductCode);
            ProductDB.DeleteProduct(p);
         }
 
@@ -45,8 +45,7 @@ namespace MMABooksTests
             p.ProductDescription = "A product for the purposes of testing.";
             p.ProductUnitPrice = 99;
             p.ProductOnHandQuantity = 10;
-            string productCode = ProductDB.AddProduct(p);
-            p = ProductDB.GetProduct(productCode);
+            p = ProductDB.GetProduct(p.ProductCode);
 
             /* Test the command.*/
             bool isProductDeleted = ProductDB.DeleteProduct(p);
@@ -63,8 +62,8 @@ namespace MMABooksTests
             oldProduct.ProductDescription = "A product for the purposes of testing.";
             oldProduct.ProductUnitPrice = 99;
             oldProduct.ProductOnHandQuantity = 10;
-            string ProductCode = ProductDB.AddProduct(oldProduct);
-            oldProduct = ProductDB.GetProduct(ProductCode);
+            ProductDB.AddProduct(oldProduct);
+            oldProduct = ProductDB.GetProduct(oldProduct.ProductCode);
 
             Product newProduct = new Product();
             newProduct.ProductDescription = "Another product for the purposes of testing.";
@@ -77,7 +76,7 @@ namespace MMABooksTests
             /* If it affected the database in some way, the test was successful. */
             Assert.AreEqual(true, isProductUpdated);
             /* Clean up the test.*/
-            newProduct = ProductDB.GetProduct(ProductCode);
+            newProduct = ProductDB.GetProduct(newProduct.ProductCode);
             ProductDB.DeleteProduct(newProduct);
         }
 
